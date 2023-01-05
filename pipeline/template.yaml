@@ -94,6 +94,9 @@ Resources:
       RestApiId: !Ref APIGWTRestApi
 
   APIGWTDeployment:
+    DependsOn: 
+       - APIGWTMediaCounterPostMethod
+       - APIGWTMediaCounterGetMethod
     Type: AWS::ApiGateway::Deployment
     Properties:
       RestApiId: !Ref APIGWTRestApi
