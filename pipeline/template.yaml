@@ -50,8 +50,8 @@ Resources:
     Properties:
       RestApiId: !Ref APIGWTRestApi
       ParentId: !GetAtt
-        - APIGWTRestApi
-        - !Ref APIGWTUserResource
+        - APIGWTUserResource
+        - RootResourceId
       PathPart: "sing-in"
 
   APIGWTUserSingUpResource:
@@ -59,8 +59,8 @@ Resources:
     Properties:
       RestApiId: !Ref APIGWTRestApi
       ParentId: !GetAtt
-        - APIGWTRestApi
-        - !Ref APIGWTUserResource
+        - APIGWTUserResource
+        - RootResourceId
       PathPart: "sing-up"
 
   APIGWTuserSingInPostMethod:
