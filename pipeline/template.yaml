@@ -64,7 +64,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: HTTP_PROXY
-        Uri: !Ref UserURL
+        Uri: !Sub '${UserURL}/SingIn'
 
   APIGWTUserSingUpGetMethod:
     Type: AWS::ApiGateway::Method
@@ -76,7 +76,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: HTTP_PROXY
-        Uri: !Ref UserURL
+        Uri: !Sub '${UserURL}/SingUp'
 
 # -------------------------------------------------------------------------
 # Deploy method to Media counter
