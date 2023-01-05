@@ -2,6 +2,9 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Up services bff to application
 
 Parameters:
+  ServiceName: 
+    Type: String
+    Default: service-podfy-bff
   LambdaAuthorizeName:
     Type: String
     Default: service-podfy-user-application-validate-token
@@ -11,7 +14,9 @@ Parameters:
   MediaCounterURL:
     Type: String
     Default: https://d7ynlgznbi.execute-api.us-east-1.amazonaws.com/Prod
-
+  UserURL:
+    Type: String
+    Default: https://fe8vz0k2fh.execute-api.us-east-1.amazonaws.com/Prod
 Resources:
   # -------------------------------------------------------------------------
   # Deploy API GW HTTP API route with autorize
@@ -20,7 +25,7 @@ Resources:
   APIGWTRestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: !Sub "bff-apigw"
+      Name: !Sub "${ServiceName}-api-gtw"
       EndpointConfiguration:
         Types:
           - EDGE
@@ -28,9 +33,63 @@ Resources:
         endpointConfigurationTypes: EDGE
 
 # -------------------------------------------------------------------------
-# Deploy method to Media counter
+# Deploy method to User
 # -------------------------------------------------------------------------
 
+  APIGWTUserResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref APIGWTRestApi
+      ParentId: !GetAtt
+        - APIGWTRestApi
+        - RootResourceId
+      PathPart: "user"
+
+  APIGWTUserSingInResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref APIGWTRestApi
+      ParentId: !GetAtt
+        - APIGWTRestApi
+        - !Ref APIGWTUserResource
+      PathPart: "sing-in"
+
+  APIGWTUserSingUpResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref APIGWTRestApi
+      ParentId: !GetAtt
+        - APIGWTRestApi
+        - !Ref APIGWTUserResource
+      PathPart: "sing-up"
+
+  APIGWTuserSingInPostMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref APIGWTRestApi
+      ResourceId: !Ref APIGWTUserSingInResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: HTTP_PROXY
+        Uri: !Ref UserURL
+
+  APIGWTUserSingUpGetMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref APIGWTRestApi
+      ResourceId: !Ref APIGWTUserSingUpResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: HTTP_PROXY
+        Uri: !Ref UserURL
+
+# -------------------------------------------------------------------------
+# Deploy method to Media counter
+# -------------------------------------------------------------------------
   APIGWTProxyResource:
     Type: AWS::ApiGateway::Resource
     Properties:
@@ -72,7 +131,7 @@ Resources:
         RequestParameters:
           integration.request.header.Authorization: method.request.header.Authorization
           integration.request.querystring.Key: method.request.querystring.Key
-        IntegrationHttpMethod: POST
+        IntegrationHttpMethod: GET
         Type: HTTP_PROXY
         Uri: !Ref MediaCounterURL
 
@@ -97,6 +156,8 @@ Resources:
     DependsOn: 
        - APIGWTMediaCounterPostMethod
        - APIGWTMediaCounterGetMethod
+       - APIGWTuserSingInPostMethod
+       - APIGWTUserSingUpGetMethod
     Type: AWS::ApiGateway::Deployment
     Properties:
       RestApiId: !Ref APIGWTRestApi
