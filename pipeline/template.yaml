@@ -43,7 +43,7 @@ Resources:
       ParentId: !GetAtt
         - APIGWTRestApi
         - RootResourceId
-      PathPart: "user/sing-in"
+      PathPart: "sing-in"
 
   APIGWTUserSingUpResource:
     Type: AWS::ApiGateway::Resource
@@ -52,7 +52,7 @@ Resources:
       ParentId: !GetAtt
         - APIGWTRestApi
         - RootResourceId
-      PathPart: "user/sing-up"
+      PathPart: "sing-up"
 
   APIGWTuserSingInPostMethod:
     Type: AWS::ApiGateway::Method
