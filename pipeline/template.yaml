@@ -94,7 +94,6 @@ Resources:
       RestApiId: !Ref APIGWTRestApi
 
   APIGWTDeployment:
-    DependsOn: APIGWTMethod
     Type: AWS::ApiGateway::Deployment
     Properties:
       RestApiId: !Ref APIGWTRestApi
