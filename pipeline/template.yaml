@@ -36,32 +36,23 @@ Resources:
 # Deploy method to User
 # -------------------------------------------------------------------------
 
-  APIGWTUserResource:
+  APIGWTUserSingInResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       RestApiId: !Ref APIGWTRestApi
       ParentId: !GetAtt
         - APIGWTRestApi
         - RootResourceId
-      PathPart: "user"
-
-  APIGWTUserSingInResource:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      RestApiId: !Ref APIGWTRestApi
-      ParentId: !GetAtt
-        - APIGWTUserResource
-        - RootResourceId
-      PathPart: "sing-in"
+      PathPart: "user/sing-in"
 
   APIGWTUserSingUpResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       RestApiId: !Ref APIGWTRestApi
       ParentId: !GetAtt
-        - APIGWTUserResource
+        - APIGWTRestApi
         - RootResourceId
-      PathPart: "sing-up"
+      PathPart: "user/sing-up"
 
   APIGWTuserSingInPostMethod:
     Type: AWS::ApiGateway::Method
