@@ -13,10 +13,10 @@ Parameters:
     Default: LambdaValidateTokenRole
   MediaCounterURL:
     Type: String
-    Default: https://d7ynlgznbi.execute-api.us-east-1.amazonaws.com/Prod
+    Default: https://jg9ue58wq3.execute-api.us-east-1.amazonaws.com/Prod
   UserURL:
     Type: String
-    Default: https://fe8vz0k2fh.execute-api.us-east-1.amazonaws.com/Prod
+    Default: https://ffw7mbgwxk.execute-api.us-east-1.amazonaws.com/Prod
 Resources:
   # -------------------------------------------------------------------------
   # Deploy API GW HTTP API route with autorize
